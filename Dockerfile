@@ -1,6 +1,9 @@
 # use latest ubuntu LTS image
 FROM ubuntu:latest
 
+# prevent "apt install" from stalling on standard input
+ENV DEBIAN_FRONTEND="noninteractive"
+
 # update system and repos
 RUN apt update -y
 
