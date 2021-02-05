@@ -13,9 +13,12 @@ RUN apt install -y apt-transport-https curl tor tor-geoipdb torsocks
 # install required tools for development
 RUN apt install -y vim g++ make gdb libconfig++-dev libmicrohttpd-dev libcurl4-openssl-dev libmagic-dev
 
+# install required tools for deployment
+RUN apt install -y gettext-base  # for envsubst
+
 # copy the torrc and torgate.conf file
 COPY config/torrc /etc/tor/torrc
-COPY config/torgate.conf /etc/torgate.conf
+COPY config/torgate.conf.tmpl /etc/torgate.conf.tmpl
 
 # copy the html files
 COPY html /var/torgate/html/
@@ -25,4 +28,4 @@ COPY src /usr/src/torgate/src/
 COPY Makefile /usr/src/torgate/Makefile
 WORKDIR /usr/src/torgate
 RUN make
-CMD service tor start && torgate
+CMD envsubst < /etc/torgate.conf.tmpl > /etc/torgate.conf && service tor start && torgate
