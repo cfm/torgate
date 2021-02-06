@@ -28,4 +28,4 @@ COPY src /usr/src/torgate/src/
 COPY Makefile /usr/src/torgate/Makefile
 WORKDIR /usr/src/torgate
 RUN make
-CMD envsubst < /etc/torgate.conf.tmpl > /etc/torgate.conf && service tor start && torgate
+CMD envsubst < /etc/torgate.conf.tmpl > /etc/torgate.conf && tor & torgate
