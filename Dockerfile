@@ -15,10 +15,12 @@ RUN apt install -y vim g++ make gdb libconfig++-dev libmicrohttpd-dev libcurl4-o
 
 # install required tools for deployment
 RUN apt install -y gettext-base  # for envsubst
+RUN apt install -y supervisor
 
 # copy the torrc and torgate.conf file
 COPY config/torrc /etc/tor/torrc
 COPY config/torgate.conf.tmpl /etc/torgate.conf.tmpl
+COPY config/supervisord.conf /etc/supervisord.conf
 
 # copy the html files
 COPY html /var/torgate/html/
@@ -28,4 +30,4 @@ COPY src /usr/src/torgate/src/
 COPY Makefile /usr/src/torgate/Makefile
 WORKDIR /usr/src/torgate
 RUN make
-CMD envsubst < /etc/torgate.conf.tmpl > /etc/torgate.conf && tor & torgate
+CMD envsubst < /etc/torgate.conf.tmpl > /etc/torgate.conf && supervisord --nodaemon
